@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EchoFind | Music Recommender</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <video class="hero-video" autoplay muted loop playsinline>
+        <source src="{{ url_for('static', filename='background.mp4') }}" type="video/mp4">
+      </video>
+      <div class="hero-overlay"></div>
+      <div class="hero-copy">
+        <p class="eyebrow">Machine Learning Music Discovery</p>
+        <h1>Find your next favorite track in a single search.</h1>
+        <p class="hero-text">
+          Type one song you love and let your recommendation engine surface similar music in a cleaner, more engaging interface.
+        </p>
+      </div>
+      <div class="hero-panel">
+        <div class="orb orb-one"></div>
+        <div class="orb orb-two"></div>
+        <div class="glass-card">
+          <p class="card-label">Live Query</p>
+          <h2>Music Recommender</h2>
+          <form id="recommend-form" class="recommend-form">
+            <label for="song_name" class="sr-only">Song name</label>
+            <input id="song_name" name="song_name" type="text" placeholder="Example: Blinding Lights" autocomplete="off" required>
+            <button type="submit">Get Recommendations</button>
+          </form>
+          <p id="form-message" class="form-message">Search by song title to generate recommendations.</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="content-grid">
+      <section class="results-section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Results</p>
+            <h3>Recommended Songs</h3>
+          </div>
+          <span id="result-badge" class="result-badge">Waiting for input</span>
+        </div>
+        <div id="results" class="results-grid">
+          <article class="placeholder-card">
+            <p class="placeholder-title">Your recommendations will appear here.</p>
+            <p class="placeholder-text">Search for a song to see model-powered recommendations.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
