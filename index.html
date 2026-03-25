@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EchoFind | Music Recommender</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>EchoFind | Music Recommender | Port 5050</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css', v='20260325a') }}">
 </head>
 <body>
   <div class="page-shell">
@@ -22,6 +25,7 @@
         <p class="hero-text">
           Type one song you love and let your recommendation engine surface similar music in a cleaner, more engaging interface.
         </p>
+        <p class="eyebrow">Updated Search: Genre, Optional Language, Song Name | Port 5050</p>
       </div>
       <div class="hero-panel">
         <div class="orb orb-one"></div>
@@ -30,11 +34,15 @@
           <p class="card-label">Live Query</p>
           <h2>Music Recommender</h2>
           <form id="recommend-form" class="recommend-form">
+            <label for="genre" class="sr-only">Genre</label>
+            <input id="genre" name="genre" type="text" placeholder="Genre or mood: love, party, sad" autocomplete="off" required>
+            <label for="language" class="sr-only">Language</label>
+            <input id="language" name="language" type="text" placeholder="Language optional: Hindi, Telugu, English" autocomplete="off">
             <label for="song_name" class="sr-only">Song name</label>
             <input id="song_name" name="song_name" type="text" placeholder="Example: Blinding Lights" autocomplete="off" required>
             <button type="submit">Get Recommendations</button>
           </form>
-          <p id="form-message" class="form-message">Search by song title to generate recommendations.</p>
+          <p id="form-message" class="form-message">Search by genre and song title. Language is optional.</p>
         </div>
       </div>
     </header>
@@ -51,13 +59,13 @@
         <div id="results" class="results-grid">
           <article class="placeholder-card">
             <p class="placeholder-title">Your recommendations will appear here.</p>
-            <p class="placeholder-text">Search for a song to see model-powered recommendations.</p>
+            <p class="placeholder-text">Search with a genre and song, and optionally add a language filter.</p>
           </article>
         </div>
       </section>
     </main>
   </div>
 
-  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  <script src="{{ url_for('static', filename='app.js', v='20260325a') }}"></script>
 </body>
 </html>

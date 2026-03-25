@@ -6,3 +6,5 @@ __pycache__/
 env/
 venv/
 .venv/
+flask.out.log.txt
+flask.err.log.txt

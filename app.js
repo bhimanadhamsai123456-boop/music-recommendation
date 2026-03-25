@@ -1,5 +1,7 @@
 const form = document.getElementById("recommend-form");
-const input = document.getElementById("song_name");
+const genreInput = document.getElementById("genre");
+const languageInput = document.getElementById("language");
+const songInput = document.getElementById("song_name");
 const message = document.getElementById("form-message");
 const results = document.getElementById("results");
 const badge = document.getElementById("result-badge");
@@ -8,12 +10,12 @@ function renderPlaceholder(text) {
   results.innerHTML = `
     <article class="placeholder-card">
       <p class="placeholder-title">${text}</p>
-      <p class="placeholder-text">Try another search or connect your recommender endpoint.</p>
+      <p class="placeholder-text">Try another search or adjust the filters.</p>
     </article>
   `;
 }
 
-function renderTracks(query, items, source) {
+function renderTracks(query, items, source, filters) {
   if (!items.length) {
     renderPlaceholder(`No recommendations found for "${query}".`);
     badge.textContent = "No matches";
@@ -29,23 +31,31 @@ function renderTracks(query, items, source) {
           <h4>${item.title}</h4>
           <p class="track-meta">${item.artist}</p>
           <p class="track-meta">${item.album}</p>
-          <p class="track-meta">${item.year ? `Year: ${item.year}` : ""}${item.popularity ? ` • Popularity: ${item.popularity}` : ""}</p>
-          <p class="track-meta">${item.language ? `Language: ${item.language}` : ""}</p>
+          <p class="track-meta">${item.year ? `Year: ${item.year}` : ""}${item.popularity ? ` â€¢ Popularity: ${item.popularity}` : ""}</p>
+          <p class="track-meta">${item.language ? `Language: ${item.language}` : ""}${item.genre ? ` â€¢ Genre: ${item.genre}` : ""}</p>
+          <p class="track-meta">${item.engine ? `Engine: ${item.engine}` : ""}</p>
           ${item.track_url ? `<a class="track-link" href="${item.track_url}" target="_blank" rel="noreferrer">Open in Spotify</a>` : ""}
         </article>
       `
     )
     .join("");
 
-  badge.textContent = `${items.length} tracks • ${source}`;
+  badge.textContent = `${items.length} tracks â€¢ ${source}`;
+  if (filters.language) {
+    message.textContent = `Showing ${filters.language} ${filters.genre} recommendations for "${query}".`;
+  } else {
+    message.textContent = `Showing ${filters.genre} recommendations for "${query}".`;
+  }
 }
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const songName = input.value.trim();
+  const genre = genreInput.value.trim();
+  const language = languageInput.value.trim();
+  const songName = songInput.value.trim();
 
-  if (!songName) {
-    message.textContent = "Please enter a song name first.";
+  if (!genre || !songName) {
+    message.textContent = "Please enter genre and song name.";
     return;
   }
 
@@ -58,7 +68,7 @@ form.addEventListener("submit", async (event) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ song_name: songName }),
+      body: JSON.stringify({ genre, language, song_name: songName }),
     });
 
     const data = await response.json();
@@ -67,8 +77,7 @@ form.addEventListener("submit", async (event) => {
       throw new Error(data.error || "Unable to fetch recommendations.");
     }
 
-    renderTracks(data.query, data.recommendations || [], data.source || "api");
-    message.textContent = `Showing recommendations for "${data.query}".`;
+    renderTracks(data.query, data.recommendations || [], data.source || "api", { genre, language });
   } catch (error) {
     renderPlaceholder("The recommender service is not responding.");
     badge.textContent = "Error";
